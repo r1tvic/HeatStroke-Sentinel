@@ -1,0 +1,2 @@
+This is a sample text file for the HeatStroke Sentinel project.
+You can read or write whatever you'd like in here!
