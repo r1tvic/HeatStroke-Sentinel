@@ -134,13 +134,26 @@ export default function Dashboard() {
   const [showCriticalModal, setShowCriticalModal] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastExiting, setToastExiting] = useState(false);
+  const [showControls, setShowControls] = useState(false);
 
   const tickRef = useRef(0);
+  const secretBuffer = useRef("");
 
   /* keyboard listener */
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       const key = e.key;
+
+      /* secret code: "6769" toggles demo controls */
+      if (["0","1","2","3","4","5","6","7","8","9"].includes(key)) {
+        secretBuffer.current = (secretBuffer.current + key).slice(-4);
+        if (secretBuffer.current === "6769") {
+          setShowControls((prev) => !prev);
+          secretBuffer.current = "";
+          return;
+        }
+      }
+
       if (!["1", "2", "3", "4"].includes(key)) return;
 
       if (key === "4") {
@@ -499,38 +512,40 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Keyboard hint */}
-          <div className="bg-surface rounded-xl border border-border-subtle p-4 text-xs text-text-muted leading-relaxed">
-            <p className="font-medium text-text-secondary mb-2">
-              Demo Controls
-            </p>
-            <div className="space-y-1 font-mono">
-              <p>
-                <kbd className="px-1.5 py-0.5 rounded bg-surface-raised border border-border text-text-secondary">
-                  1
-                </kbd>{" "}
-                Normal
+          {/* Keyboard hint — hidden until secret code "6769" is typed */}
+          {showControls && (
+            <div className="bg-surface rounded-xl border border-border-subtle p-4 text-xs text-text-muted leading-relaxed">
+              <p className="font-medium text-text-secondary mb-2">
+                Demo Controls
               </p>
-              <p>
-                <kbd className="px-1.5 py-0.5 rounded bg-surface-raised border border-border text-text-secondary">
-                  2
-                </kbd>{" "}
-                Heat Strain
-              </p>
-              <p>
-                <kbd className="px-1.5 py-0.5 rounded bg-surface-raised border border-border text-text-secondary">
-                  3
-                </kbd>{" "}
-                Critical Alert
-              </p>
-              <p>
-                <kbd className="px-1.5 py-0.5 rounded bg-surface-raised border border-border text-text-secondary">
-                  4
-                </kbd>{" "}
-                NFC Patch Sync
-              </p>
+              <div className="space-y-1 font-mono">
+                <p>
+                  <kbd className="px-1.5 py-0.5 rounded bg-surface-raised border border-border text-text-secondary">
+                    1
+                  </kbd>{" "}
+                  Normal
+                </p>
+                <p>
+                  <kbd className="px-1.5 py-0.5 rounded bg-surface-raised border border-border text-text-secondary">
+                    2
+                  </kbd>{" "}
+                  Heat Strain
+                </p>
+                <p>
+                  <kbd className="px-1.5 py-0.5 rounded bg-surface-raised border border-border text-text-secondary">
+                    3
+                  </kbd>{" "}
+                  Critical Alert
+                </p>
+                <p>
+                  <kbd className="px-1.5 py-0.5 rounded bg-surface-raised border border-border text-text-secondary">
+                    4
+                  </kbd>{" "}
+                  NFC Patch Sync
+                </p>
+              </div>
             </div>
-          </div>
+          )}
         </aside>
       </main>
 
